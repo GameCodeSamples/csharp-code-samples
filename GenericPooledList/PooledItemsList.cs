@@ -4,50 +4,71 @@ using UnityEngine.Pool;
 
 namespace Wonderland
 {
-    //I attached this script to showcase the use of generics and the model-viewModel pattern that i use in UI system
-    //For instance you can created a new pool of items for painting different types of list with different UIItems based on different view models
-    //You can also apreciate the use of the object pool pattern(in this case i use the Unity built in pool but before it existed i used my own pool)
-
+    // This class represents a list of UI items that are pooled for better performance.
+    // It uses generics to allow for different types of UIItems with its respective view models.
     public class PooledItemsList<TView, TViewModel> where TView : UIItem<TViewModel>
     {
-        private TView animationItemPrefab;
-        private Transform gridTransform;
-        private IObjectPool<TView> viewsPool;
-        private List<TView> currentViews = new();
+        private TView itemPrefab; // Renamed from animationItemPrefab for clarity
+        private Transform parentTransform;
+        private IObjectPool<TView> itemPool;
+        private List<TView> activeItems = new List<TView>(); // Renamed from currentViews for clarity
         private int poolDefaultCapacity = 30;
 
-        public PooledItemsList(TView animationItemPrefab, Transform gridTransform, int poolDefaultCapacity = 30)
+        // Constructor that takes in the item prefab, parent transform, and optional pool default capacity.
+        public PooledItemsList(TView itemPrefab, Transform parentTransform, int poolDefaultCapacity = 30)
         {
-            this.animationItemPrefab = animationItemPrefab;
-            this.gridTransform = gridTransform;
+            this.itemPrefab = itemPrefab;
+            this.parentTransform = parentTransform;
             this.poolDefaultCapacity = poolDefaultCapacity;
         }
 
+        // Initializes the item pool with the specified default capacity.
         public void Initialize()
         {
-            viewsPool = new ObjectPool<TView>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, defaultCapacity: poolDefaultCapacity);
+            itemPool = new ObjectPool<TView>(CreatePooledItem, OnTakeFromPool, OnReturnToPool, defaultCapacity: poolDefaultCapacity);
         }
         
-        public void RepaintItems(List<TViewModel> viewModelsList)
+        // Repaints the UI items with the specified view models.
+        // This method first releases all currently active items back into the pool,
+        // then creates new UI items for each view model and adds them to the active items list.
+        public void RepaintItems(List<TViewModel> viewModels)
         {
-            foreach (var view in currentViews) viewsPool.Release(view);
-            currentViews.Clear();
-
-            foreach (var item in viewModelsList)
+            // Release all currently active items back into the pool.
+            foreach (TView item in activeItems)
             {
-                viewsPool.Get(out TView itemUI);
-                itemUI.Repaint(item);
-                currentViews.Add(itemUI);
+                itemPool.Release(item);
+            }
+            activeItems.Clear();
+
+            // Create new UI items for each view model and add them to the active items list.
+            foreach (TViewModel viewModel in viewModels)
+            {
+                TView item = itemPool.Get();
+                item.Repaint(viewModel);
+                item.transform.SetParent(parentTransform, false);
+                activeItems.Add(item);
             }
         }
-        private void OnReturnedToPool(TView obj) => obj.gameObject.SetActive(false);
 
-        private void OnTakeFromPool(TView obj)
+        // Called when an item is returned to the pool.
+        // Deactivates the item's game object so it is not visible.
+        private void OnReturnToPool(TView item)
         {
-            obj.transform.SetAsLastSibling();
-            obj.gameObject.SetActive(true);
+            item.gameObject.SetActive(false);
         }
 
-        private TView CreatePooledItem() => UnityEngine.Object.Instantiate(animationItemPrefab, gridTransform);
+        // Called when an item is taken from the pool.
+        // Activates the item's game object and sets its transform to the last sibling so it appears on top.
+        private void OnTakeFromPool(TView item)
+        {
+            item.transform.SetAsLastSibling();
+            item.gameObject.SetActive(true);
+        }
+
+        // Creates a new item instance.
+        private TView CreatePooledItem()
+        {
+            return Object.Instantiate(itemPrefab, parentTransform);
+        }
     }
 }
