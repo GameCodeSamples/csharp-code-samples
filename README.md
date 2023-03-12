@@ -2,7 +2,6 @@
 
 csharp created systems showcase 👩‍💻. <br />
 <br />
-In every folder uploaded there is either a Documentation Folder or a brief explanation at the beginning of the script to explain the functionality of the script or system.
 
 ## [Camera System 🎥🚶](https://github.com/GameCodeSamples/csharp-code-samples/tree/main/CameraSystem)
 
