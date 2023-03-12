@@ -1,4 +1,4 @@
-This camera system shows the implementation of a free look camera using cinemachine that allows for:
+This camera system shows the implementation of a third person free look camera in C# using cinemachine that allows for:
 - Following a target: The camera smoothly follows a target object, which can be set in the Unity editor or programmatically.
 - Rotating: The camera can rotate around the target object based on user input, such as mouse movement or touch gestures.
 - Zooming: The camera distance can be adjusted to zoom in or out from the target object.
