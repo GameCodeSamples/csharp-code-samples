@@ -1,6 +1,6 @@
 # csharp-code-samples
 
-csharp created systems showcase 👩‍💻. <br />
+csharp created systems showcase 👩‍💻.
 <br />
 
 ## [Camera System 🎥🚶](https://github.com/GameCodeSamples/csharp-code-samples/tree/main/CameraSystem)
