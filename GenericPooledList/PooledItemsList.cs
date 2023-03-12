@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 namespace Wonderland
 {
     // This class represents a list of UI items that are pooled for better performance.
-    // It uses generics to allow for different types of UIItems with its respective view models.
+    // It uses generics to allow for different types of UIItems with its respective view models (data needed to update, usually structs).
     public class PooledItemsList<TView, TViewModel> where TView : UIItem<TViewModel>
     {
         private TView itemPrefab; // Renamed from animationItemPrefab for clarity
