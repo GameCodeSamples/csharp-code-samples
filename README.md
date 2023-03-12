@@ -3,10 +3,6 @@
 csharp created systems showcase 👩‍💻.
 <br />
 
-## [Camera System 🎥🚶](https://github.com/GameCodeSamples/csharp-code-samples/tree/main/CameraSystem)
-
-Third person free look camera system in C# using cinemachine.
-
 ## [AsyncDataFetch 📦🔄](https://github.com/GameCodeSamples/csharp-code-samples/tree/main/AsyncDataFetch)
 
 Service class that provides methods for asynchronous loading and instantiating assets from Addressable Assets.
@@ -22,3 +18,7 @@ Flexible and customizable system to create interactive objects in the game. In t
 ## [Networking 🌐](https://github.com/GameCodeSamples/csharp-code-samples/tree/main/Networking)
 
 Network programming section. It contains the script responsible for replicating the animations between all clients.
+
+## [Camera System 🎥🚶](https://github.com/GameCodeSamples/csharp-code-samples/tree/main/CameraSystem)
+
+Third person free look camera system in C# using cinemachine.
